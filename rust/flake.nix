@@ -22,17 +22,19 @@
                 [ rust-overlay.overlays.default self.overlays.default ];
             };
           });
-    in {
+    in
+    {
       overlays.default = final: prev: {
-        rustToolchain = let rust = prev.rust-bin;
-        in if builtins.pathExists ./rust-toolchain.toml then
-          rust.fromRustupToolchainFile ./rust-toolchain.toml
-        else if builtins.pathExists ./rust-toolchain then
-          rust.fromRustupToolchainFile ./rust-toolchain
-        else
-          rust.stable.latest.default.override {
-            extensions = [ "rust-src" "rustfmt" ];
-          };
+        rustToolchain =
+          let rust = prev.rust-bin;
+          in if builtins.pathExists ./rust-toolchain.toml then
+            rust.fromRustupToolchainFile ./rust-toolchain.toml
+          else if builtins.pathExists ./rust-toolchain then
+            rust.fromRustupToolchainFile ./rust-toolchain
+          else
+            rust.stable.latest.default.override {
+              extensions = [ "rust-src" "rustfmt" ];
+            };
       };
 
       devShells = forEachSupportedSystem ({ pkgs }: {
